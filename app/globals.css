@@ -1,26 +1,61 @@
 @import "tailwindcss";
 
+/* El modo oscuro se activa con la clase "dark" en <html> (la pone el botón de tema) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ===== Tema claro ===== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f5f6fb;
+  --surface: #ffffff;
+  --foreground: #1c1d3b;
+  --muted: #64688a;
+  --border: #dcdeef;
+
+  --primary: #464798;          /* índigo (brandbook) */
+  --primary-foreground: #ffffff;
+  --accent: #5fc4e5;           /* celeste (brandbook) */
+  --success: #94cba4;          /* verde (brandbook) */
+  --info: #4266ae;             /* azul (brandbook) */
+  --lavender: #9387c0;         /* lavanda (brandbook) */
+  --danger: #c2414b;           /* único color fuera de la paleta: errores */
 }
 
+/* ===== Tema oscuro ===== */
+.dark {
+  --background: #0e0f22;
+  --surface: #17183a;
+  --foreground: #e7e8f6;
+  --muted: #9a9dc2;
+  --border: #2b2d58;
+
+  --primary: #5fc4e5;          /* celeste: se lee mejor que el índigo sobre fondo oscuro */
+  --primary-foreground: #0e0f22;
+  --accent: #8a8bd6;
+  --success: #94cba4;
+  --info: #7d9be0;
+  --lavender: #9387c0;
+  --danger: #f08a91;
+}
+
+/* Tokens disponibles como clases de Tailwind: bg-primary, text-muted, border-border, etc. */
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-info: var(--info);
+  --color-lavender: var(--lavender);
+  --color-danger: var(--danger);
+
+  /* Colores fijos de la marca (no cambian con el tema): para el degradé */
+  --color-brand-indigo: #464798;
+  --color-brand-cyan: #5fc4e5;
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
