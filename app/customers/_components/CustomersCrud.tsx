@@ -11,6 +11,8 @@ import type { Customer } from "../_lib/types";
 import CustomerFilters from "./CustomerFilters";
 import CustomerForm from "./CustomerForm";
 import CustomersTable from "./CustomersTable";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const TAMANIO_PAGINA = 10;
 
@@ -122,13 +124,10 @@ export default function CustomersCrud() {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-2xl font-semibold">Clientes</h1>
-        <button
-          type="button"
-          onClick={() => abrirModal(null)}
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-        >
-          + Nuevo
-        </button>
+        <Button onClick={() => abrirModal(null)}>
+          <Plus aria-hidden="true" />
+          Nuevo
+        </Button>
       </div>
 
       <CustomerFilters
