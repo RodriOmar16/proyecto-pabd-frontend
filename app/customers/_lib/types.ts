@@ -13,13 +13,11 @@ export type Customer = {
   country: string | null;
   phone: string | null;
   fax: string | null;
-  ordersquantity: number | null;
-  ordersamount: number | null;
   disabled: boolean;
 };
 
 /** Valores del formulario de alta/edición: un texto por campo. */
 export type CustomerValues = Record<CampoCliente, string>;
 
-/** Lo que devuelve el endpoint de cambio de estado. */
-export type CustomerEstado = Pick<Customer, "customerid" | "companyname" | "disabled">;
+/** Lo que devuelve el endpoint de cambio de estado (mensaje de fn_abm_cliente). */
+export type CustomerEstado = { customerid: string; mensaje: string };

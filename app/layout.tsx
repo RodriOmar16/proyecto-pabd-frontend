@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import "./globals.css";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,8 +34,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: scriptTema }} />
       </head>
       <body className="flex min-h-full flex-col bg-background text-foreground">
-        <Navbar />
-        <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-8">{children}</main>
+        <TooltipProvider>
+          <Navbar />
+          <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-8">{children}</main>
+        </TooltipProvider>
       </body>
     </html>
   );

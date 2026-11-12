@@ -15,7 +15,7 @@ export default function Navbar() {
   const pathname = usePathname(); // ruta actual, para marcar el link activo
 
     return (
-    <header className="border-b border-border bg-surface">
+    <header className="border-b border-border bg-card">
       {/* Franja con el degradé de la marca */}
       <div className="h-1 bg-linear-to-r from-brand-cyan to-brand-indigo" />
       <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
@@ -31,7 +31,7 @@ export default function Navbar() {
                     className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                       activo
                         ? "bg-primary text-primary-foreground"
-                        : "text-muted hover:bg-primary/10 hover:text-foreground"
+                        : "text-muted-foreground hover:bg-primary/10 hover:text-foreground"
                     }`}
                   >
                     {link.label}

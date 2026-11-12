@@ -16,7 +16,7 @@ export default function CustomersTable({ clientes, cargando, onEditar, onCambiar
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
-        <thead className="border-b border-border bg-background text-xs uppercase tracking-wide text-muted">
+        <thead className="border-b border-border bg-background text-xs uppercase tracking-wide text-muted-foreground">
           <tr>
             {COLUMNAS.map((columna) => (
               <th key={columna} className={`px-4 py-3 font-medium ${columna === "Acciones" ? "text-right" : ""}`}>
@@ -28,7 +28,7 @@ export default function CustomersTable({ clientes, cargando, onEditar, onCambiar
         <tbody className={cargando ? "opacity-50" : ""}>
           {clientes.length === 0 && (
             <tr>
-              <td colSpan={COLUMNAS.length} className="px-4 py-10 text-center text-muted">
+              <td colSpan={COLUMNAS.length} className="px-4 py-10 text-center text-muted-foreground">
                 {cargando ? "Cargando…" : "No se encontraron clientes."}
               </td>
             </tr>

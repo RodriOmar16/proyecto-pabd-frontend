@@ -142,12 +142,12 @@ export default function CustomersCrud() {
       />
 
       {error && (
-        <p role="alert" className="rounded-md border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
+        <p role="alert" className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
           {error}
         </p>
       )}
 
-      <div className="overflow-hidden rounded-xl border border-border bg-surface">
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
         <CustomersTable
           clientes={resultado?.data ?? []}
           cargando={cargando}
