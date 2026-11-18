@@ -1,61 +1,152 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 /* El modo oscuro se activa con la clase "dark" en <html> (la pone el botón de tema) */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* =====================================================================
+   Paleta Innovartic (brandbook) con los nombres de variables de shadcn.
+   - primary   : índigo (claro) / celeste (oscuro)
+   - accent    : fondo suave de hover (lo usan los componentes de shadcn)
+   - muted     : fondo suave; el texto secundario es muted-foreground
+   - destructive: errores e inhabilitar
+   Extras propios: success, info, lavender, brand-indigo, brand-cyan
+   ===================================================================== */
+
 /* ===== Tema claro ===== */
 :root {
-  --background: #f5f6fb;
-  --surface: #ffffff;
-  --foreground: #1c1d3b;
-  --muted: #64688a;
-  --border: #dcdeef;
+  --radius: 0.625rem;
 
-  --primary: #464798;          /* índigo (brandbook) */
+  --background: #f5f6fb;
+  --foreground: #1c1d3b;
+
+  --card: #ffffff;
+  --card-foreground: #1c1d3b;
+  --popover: #ffffff;
+  --popover-foreground: #1c1d3b;
+
+  --primary: #464798;            /* índigo (brandbook) */
   --primary-foreground: #ffffff;
-  --accent: #5fc4e5;           /* celeste (brandbook) */
-  --success: #94cba4;          /* verde (brandbook) */
-  --info: #4266ae;             /* azul (brandbook) */
-  --lavender: #9387c0;         /* lavanda (brandbook) */
-  --danger: #c2414b;           /* único color fuera de la paleta: errores */
+  --secondary: #eceefa;          /* índigo muy suave */
+  --secondary-foreground: #464798;
+
+  --muted: #eef0f8;
+  --muted-foreground: #64688a;   /* texto secundario */
+  --accent: #e6f5fb;             /* celeste muy suave (hover) */
+  --accent-foreground: #1c1d3b;
+
+  --destructive: #c2414b;        /* único color fuera de la paleta: errores */
+
+  --border: #dcdeef;
+  --input: #dcdeef;
+  --ring: #5fc4e5;               /* celeste: foco de inputs y botones */
+
+  --success: #94cba4;            /* verde (brandbook) */
+  --info: #4266ae;               /* azul (brandbook) */
+  --lavender: #9387c0;           /* lavanda (brandbook) */
+
+  --chart-1: #464798;
+  --chart-2: #5fc4e5;
+  --chart-3: #94cba4;
+  --chart-4: #4266ae;
+  --chart-5: #9387c0;
 }
 
 /* ===== Tema oscuro ===== */
 .dark {
   --background: #0e0f22;
-  --surface: #17183a;
   --foreground: #e7e8f6;
-  --muted: #9a9dc2;
-  --border: #2b2d58;
 
-  --primary: #5fc4e5;          /* celeste: se lee mejor que el índigo sobre fondo oscuro */
+  --card: #17183a;
+  --card-foreground: #e7e8f6;
+  --popover: #17183a;
+  --popover-foreground: #e7e8f6;
+
+  --primary: #5fc4e5;            /* celeste: se lee mejor que el índigo sobre fondo oscuro */
   --primary-foreground: #0e0f22;
-  --accent: #8a8bd6;
+  --secondary: #23254d;
+  --secondary-foreground: #e7e8f6;
+
+  --muted: #1f2147;
+  --muted-foreground: #9a9dc2;
+  --accent: #23254d;
+  --accent-foreground: #e7e8f6;
+
+  --destructive: #f08a91;
+
+  --border: #2b2d58;
+  --input: #2b2d58;
+  --ring: #5fc4e5;
+
   --success: #94cba4;
   --info: #7d9be0;
   --lavender: #9387c0;
-  --danger: #f08a91;
+
+  --chart-1: #8a8bd6;
+  --chart-2: #5fc4e5;
+  --chart-3: #94cba4;
+  --chart-4: #7d9be0;
+  --chart-5: #9387c0;
 }
 
-/* Tokens disponibles como clases de Tailwind: bg-primary, text-muted, border-border, etc. */
+/* Tokens disponibles como clases de Tailwind: bg-primary, text-muted-foreground, bg-card, etc. */
 @theme inline {
   --color-background: var(--background);
-  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Propios del proyecto */
   --color-success: var(--success);
   --color-info: var(--info);
   --color-lavender: var(--lavender);
-  --color-danger: var(--danger);
 
   /* Colores fijos de la marca (no cambian con el tema): para el degradé */
   --color-brand-indigo: #464798;
   --color-brand-cyan: #5fc4e5;
 
+  /* Tipografía: Geist (cargada en layout.tsx) */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-geist-sans);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
 }

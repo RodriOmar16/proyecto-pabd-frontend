@@ -27,15 +27,15 @@ export default function CustomerFilters({ disabled, buscando, onBuscar, onCambia
   }
 
   return (
-    <form onSubmit={buscar} className="rounded-xl border border-border bg-surface p-4">
+    <form onSubmit={buscar} className="rounded-xl border border-border bg-card p-4">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {CAMPOS.map((campo) => (
-          <label key={campo.name} className="flex flex-col gap-1 text-xs font-medium text-muted">
+          <label key={campo.name} className="flex flex-col gap-1 text-xs font-medium text-muted-foreground">
             {campo.label}
             <input
               value={valores[campo.name] ?? ""}
               onChange={(e) => setValores({ ...valores, [campo.name]: e.target.value })}
-              className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-accent focus:ring-2 focus:ring-accent/30"
+              className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30	"
             />
           </label>
         ))}

@@ -13,7 +13,7 @@ export default function Pagination({ page, size, total, onChange }: Props) {
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
-      <span className="text-muted">
+      <span className="text-muted-foreground">
         {total} resultado{total === 1 ? "" : "s"}
       </span>
       <div className="flex items-center gap-2">
