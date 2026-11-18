@@ -8,7 +8,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 const LINKS = [
   { href: "/customers", label: "Clientes" },
   // { href: "/products", label: "Productos" },
-  // { href: "/suppliers", label: "Proveedores" },
+  { href: "/suppliers", label: "Proveedores" },
 ];
 
 export default function Navbar() {
