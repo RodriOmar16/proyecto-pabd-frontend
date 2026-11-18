@@ -9,12 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@tailwindcss/oxide-win32-x64-msvc": "^4.3.5",
-=======
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.2",
->>>>>>> d36e11d3a0f892f6d03ba7a5d6c13ca39324a72f
     "lucide-react": "^1.72.0",
     "next": "16.4.6",
     "radix-ui": "^1.8.1",
