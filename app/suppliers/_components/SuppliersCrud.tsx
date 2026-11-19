@@ -11,6 +11,8 @@ import type { Supplier } from "../_lib/types";
 import SupplierFilters from "./SupplierFilters";
 import SupplierForm from "./SupplierForm";
 import SuppliersTable from "./SuppliersTable";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const TAMANIO_PAGINA = 10;
 
@@ -119,13 +121,10 @@ export default function SuppliersCrud() {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-2xl font-semibold">Suppliers</h1>
-        <button
-          type="button"
-          onClick={() => abrirModal(null)}
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-        >
-          + Nuevo
-        </button>
+        <Button onClick={() => abrirModal(null)}>
+          <Plus aria-hidden="true" />
+          Nuevo
+        </Button>
       </div>
 
       <SupplierFilters
@@ -142,7 +141,7 @@ export default function SuppliersCrud() {
         </p>
       )}
 
-      <div className="overflow-hidden rounded-xl border border-border bg-surface">
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
         <SuppliersTable
           suppliers={resultado?.data ?? []}
           cargando={cargando}
