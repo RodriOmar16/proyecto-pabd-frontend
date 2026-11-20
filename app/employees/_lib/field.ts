@@ -3,7 +3,7 @@
  * "max" es el largo máximo que acepta la base (igual que LIMITES en el backend).
  */
 
-export const CAMPOS = [
+export const CAMPOS  = [
   { name: "employeeid", label: "Código" },
   { name: "lastname", label: "Apellido" },
   { name: "firstname", label: "Nombre" },

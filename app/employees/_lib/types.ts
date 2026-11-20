@@ -23,6 +23,12 @@ export type Employee = {
   disabled: boolean;
 };
 
+export type SupervisorOption = {
+  employeeid: number;
+  firstname: string;
+  lastname: string;
+};
+
 /** Valores del formulario de alta/edición: un texto por campo. */
 export type EmployeeValues = Record<CampoEmpleado, string>;
 

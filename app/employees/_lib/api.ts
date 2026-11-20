@@ -1,6 +1,6 @@
 import { apiFetch, buildListQuery } from "@/lib/api";
 import type { ListParams, Paginated } from "@/lib/types";
-import type { Employee, EmployeeEstado, EmployeeValues } from "./types";
+import type { Employee, EmployeeEstado, EmployeeValues, SupervisorOption } from "./types";
 
 const BASE = "/api/employees";
 
@@ -30,4 +30,17 @@ export function updateEmployee(id: number, data: EmployeeValues) {
 /** Habilita o inhabilita: invierte el estado actual. */
 export function toggleEmployee(id: number) {
   return apiFetch<EmployeeEstado>(`${BASE}/${encodeURIComponent(id)}/estado`, { method: "PATCH" });
+}
+
+/** Lista los países disponibles. */
+export function listCountries() {
+  return apiFetch<string[]>(`${BASE}/paises`);
+}
+
+export function listSupervisors(employeeid?: number) {
+  const query = employeeid !== undefined
+    ? `?employeeid=${encodeURIComponent(employeeid)}`
+    : "";
+
+  return apiFetch<SupervisorOption[]>(`${BASE}/supervisores${query}`);
 }

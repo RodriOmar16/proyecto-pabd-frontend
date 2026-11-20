@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
+import { listCountries, listSupervisors } from "../_lib/api";
 import { Loader2, Search } from "lucide-react";
 import Switch from "@/components/Switch";
 import { CAMPOS } from "../_lib/field";
+import type { SupervisorOption } from "../_lib/types";
 
 type Props = {
   disabled: boolean;
@@ -15,6 +17,27 @@ type Props = {
 /** Un campo de búsqueda por columna, switch de inhabilitados y botones Limpiar/Buscar. */
 export default function CustomerFilters({ disabled, buscando, onBuscar, onCambiarDisabled }: Props) {
   const [valores, setValores] = useState<Record<string, string>>({});
+  const [paises, setPaises] = useState<string[]>([]);
+  const [supervisores, setSupervisores] = useState<SupervisorOption[]>([]);
+
+  useEffect(() => {
+    async function cargarOpciones() {
+      try {
+        const [listaPaises, listaSupervisores] = await Promise.all([
+          listCountries(),
+          listSupervisors(),
+        ]);
+
+        setPaises(listaPaises);
+        setSupervisores(listaSupervisores);
+      } catch (err) {
+        console.error("Error al cargar las opciones:", err);
+      }
+    }
+
+    cargarOpciones();
+  }, []);
+
 
   function buscar(e: FormEvent) {
     e.preventDefault(); // evita que el formulario recargue la página
@@ -32,14 +55,48 @@ export default function CustomerFilters({ disabled, buscando, onBuscar, onCambia
         {CAMPOS.map((campo) => (
           <label key={campo.name} className="flex flex-col gap-1 text-xs font-medium text-muted-foreground">
             {campo.label}
-            <input
-              value={valores[campo.name] ?? ""}
-              onChange={(e) => setValores({ ...valores, [campo.name]: e.target.value })}
-              className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30	"
-            />
+
+            {campo.name === "country" ? (
+              <select
+                value={valores[campo.name] ?? ""}
+                onChange={(e) =>
+                  setValores({ ...valores, [campo.name]: e.target.value })
+                }
+                className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30"
+              >
+                <option value="">Todos los países</option>
+                {paises.map((pais) => (
+                  <option key={pais} value={pais}>
+                    {pais}
+                  </option>
+                ))}
+              </select>
+            ) : campo.name === "reportsto" ? (
+              <select
+                value={valores[campo.name] ?? ""}
+                onChange={(e) =>
+                  setValores({ ...valores, [campo.name]: e.target.value })
+                }
+                className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30"
+              >
+                <option value="">Todos los supervisores</option>
+                {supervisores.map((supervisor) => (
+                  <option key={supervisor.employeeid} value={supervisor.employeeid}>
+                    {supervisor.firstname} {supervisor.lastname}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                value={valores[campo.name] ?? ""}
+                onChange={(e) =>
+                  setValores({ ...valores, [campo.name]: e.target.value })
+                }
+                className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30"
+              />
+            )}
           </label>
         ))}
-
         {/* Celda 12 de la grilla: fila 3, columna 4 en pantallas grandes */}
         <div className="flex items-end pb-2">
           <Switch checked={disabled} onChange={onCambiarDisabled} label="Inhabilitados" />

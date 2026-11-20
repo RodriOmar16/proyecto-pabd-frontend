@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import type { OpcionesConfirmacion } from "@/components/ConfirmDialog";
 import { ApiError } from "@/lib/api";
-import { createEmployee, updateEmployee } from "../_lib/api";
+import { createEmployee, updateEmployee, listCountries, listSupervisors } from "../_lib/api";
 import { CAMPOS } from "../_lib/field";
-import type { Employee, EmployeeValues } from "../_lib/types";
+import type { Employee, EmployeeValues, SupervisorOption } from "../_lib/types";
 
 type Props = {
   empleado: Employee | null; // null = alta de un empleado nuevo
@@ -31,6 +31,31 @@ export default function EmployeeForm({ empleado, confirmar, onCambios, onGuardad
   const [valores, setValores] = useState<EmployeeValues>(iniciales);
   const [error, setError] = useState<string | null>(null);
   const [guardando, setGuardando] = useState(false);
+  const [paises, setPaises] = useState<string[]>([]);
+  const [supervisores, setSupervisores] = useState<SupervisorOption[]>([]);
+
+  useEffect(() => {
+    async function cargarOpciones() {
+      try {
+        const [paises, supervisores] = await Promise.all([
+          listCountries(),
+          listSupervisors(empleado?.employeeid),
+        ]);
+
+        setPaises(paises);
+        setSupervisores(supervisores);
+      } catch (err) {
+        setError(
+          err instanceof ApiError
+            ? err.message
+            : "No se pudieron cargar las opciones"
+        );
+      }
+    }
+
+    cargarOpciones();
+  }, [empleado]);
+
 
   function cambiarCampo(nombre: keyof EmployeeValues, valor: string) {
     const nuevos = { ...valores, [nombre]: valor };
@@ -76,22 +101,56 @@ export default function EmployeeForm({ empleado, confirmar, onCambios, onGuardad
         {CAMPOS.map((campo) => {
           const esCodigo = campo.name === "employeeid";
           const obligatorio = esCodigo || campo.name === "firstname";
+          const esPais = campo.name === "country";
+          const esSupervisor = campo.name === "reportsto";
+
           return (
             <label key={campo.name} className="flex flex-col gap-1 text-xs font-medium text-muted-foreground">
               <span>
                 {campo.label}
                 {obligatorio && <span className="text-destructive"> *</span>}
               </span>
-              <input
-                value={valores[campo.name]}
-                onChange={(e) =>
-                  cambiarCampo(campo.name, esCodigo ? e.target.value.toUpperCase() : e.target.value)
-                }
-                maxLength={"max" in campo ? campo.max : undefined}
-                required={obligatorio}
-                readOnly={esCodigo && empleado !== null} // el código no se edita
-                className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none read-only:opacity-60 focus:border-ring focus:ring-2 focus:ring-ring/30	"
-              />
+
+              {esPais ? (
+                      <select
+                        value={valores[campo.name]}
+                        onChange={(e) => cambiarCampo(campo.name, e.target.value)}
+                        className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30"
+                      >
+                        <option value="">Seleccionar país</option>
+                        {paises.map((pais) => (
+                          <option key={pais} value={pais}>
+                            {pais}
+                          </option>
+                        ))}
+                      </select>
+                    ) : esSupervisor ? (
+                      <select
+                        value={valores[campo.name]}
+                        onChange={(e) => cambiarCampo(campo.name, e.target.value)}
+                        className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30"
+                      >
+                        <option value="">Sin supervisor</option>
+                        {supervisores.map((supervisor) => (
+                          <option key={supervisor.employeeid} value={supervisor.employeeid}>
+                            {supervisor.lastname} {supervisor.firstname} 
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        value={valores[campo.name]}
+                        onChange={(e) =>
+                          cambiarCampo(campo.name, esCodigo ? e.target.value.toUpperCase() : e.target.value)
+                        }
+                        maxLength={"max" in campo && typeof campo.max === "number"
+                          ? campo.max
+                          : undefined}                        
+                        required={obligatorio}
+                        readOnly={esCodigo && empleado !== null}
+                        className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none read-only:opacity-60 focus:border-ring focus:ring-2 focus:ring-ring/30"
+                      />
+                    )}
             </label>
           );
         })}
