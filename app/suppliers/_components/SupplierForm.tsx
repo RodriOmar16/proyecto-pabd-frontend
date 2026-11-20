@@ -43,12 +43,12 @@ export default function SupplierForm({ supplier, confirmar, onCambios, onGuardad
     const ok = await confirmar(
       supplier === null
         ? {
-            titulo: "Crear supplier",
-            mensaje: `¿Confirmás crear el supplier – ${valores.companyname}?`,
+            titulo: "Crear proveedor",
+            mensaje: `¿Confirmás crear el proveedor – ${valores.companyname}?`,
           }
         : {
             titulo: "Guardar cambios",
-            mensaje: `¿Confirmás guardar los cambios del supplier ${supplier.supplierid}?`,
+            mensaje: `¿Confirmás guardar los cambios del proveedor ${supplier.supplierid}?`,
           },
     );
     if (!ok) return;

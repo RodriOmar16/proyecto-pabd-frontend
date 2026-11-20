@@ -16,7 +16,7 @@ type Props = {
   onEditar: (supplier: Supplier) => void;
   onCambiarEstado: (supplier: Supplier) => void;
 };
-const COLUMNAS = ["Código", "Empresa", "Contacto", "Ciudad", "País", "Teléfono", "Acciones"];
+const COLUMNAS = ["Código", "Empresa", "Contacto", "Ciudad", "País", "Teléfono", "Sitio Web","Acciones"];
 export default function SuppliersTable({ suppliers, cargando, onEditar, onCambiarEstado }: Props) {
   return (
     <Table>
@@ -51,6 +51,25 @@ export default function SuppliersTable({ suppliers, cargando, onEditar, onCambia
             <TableCell className="px-4">{supplier.city ?? "—"}</TableCell>
             <TableCell className="px-4">{supplier.country ?? "—"}</TableCell>
             <TableCell className="px-4">{supplier.phone ?? "—"}</TableCell>
+            <TableCell className="px-4 whitespace-nowrap">
+              {supplier.homepage?.trim() ? (
+                <a
+                  href={
+                    supplier.homepage.trim().startsWith("http://") || supplier.homepage.trim().startsWith("https://")
+                      ? supplier.homepage.trim()
+                      : `https://${supplier.homepage.trim()}`
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={supplier.homepage.trim()}
+                  className="text-primary underline underline-offset-4 hover:opacity-80 transition-opacity"
+                >
+                  Visitar web
+                </a>
+              ) : (
+                "—"
+              )}
+            </TableCell>
             <TableCell className="px-4">
               <div className="flex justify-end gap-1">
                 <IconButton
