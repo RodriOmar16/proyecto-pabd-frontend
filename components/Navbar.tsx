@@ -7,8 +7,8 @@ import ThemeToggle from "@/components/ThemeToggle";
 // Cada integrante agrega acá el link de su tabla
 const LINKS = [
   { href: "/customers", label: "Clientes" },
-  // { href: "/products", label: "Productos" },
   { href: "/suppliers", label: "Proveedores" },
+  { href: "/employees", label: "Empleados" },
 ];
 
 export default function Navbar() {
