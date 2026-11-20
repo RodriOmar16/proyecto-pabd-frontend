@@ -77,10 +77,10 @@ export default function SupplierForm({ supplier, confirmar, onCambios, onGuardad
           const esCodigo = campo.name === "supplierid";
           const obligatorio = esCodigo || campo.name === "companyname";
           return (
-            <label key={campo.name} className="flex flex-col gap-1 text-xs font-medium text-muted">
+            <label key={campo.name} className="flex flex-col gap-1 text-xs font-medium text-muted-foreground">
               <span>
                 {campo.label}
-                {obligatorio && <span className="text-danger"> *</span>}
+                {obligatorio && <span className="text-destructive"> *</span>}
               </span>
               <input
                 value={valores[campo.name]}
@@ -89,8 +89,8 @@ export default function SupplierForm({ supplier, confirmar, onCambios, onGuardad
                 }
                 maxLength={campo.max}
                 required={obligatorio}
-                readOnly={esCodigo && supplier !== null} // el código no se edita
-                className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none read-only:opacity-60 focus:border-accent focus:ring-2 focus:ring-accent/30"
+                readOnly={esCodigo && supplier !== null}
+                className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none read-only:opacity-60 focus:border-ring focus:ring-2 focus:ring-ring/30"
               />
             </label>
           );
@@ -98,7 +98,7 @@ export default function SupplierForm({ supplier, confirmar, onCambios, onGuardad
       </div>
 
       {error && (
-        <p role="alert" className="rounded-md border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
+        <p role="alert" className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
           {error}
         </p>
       )}

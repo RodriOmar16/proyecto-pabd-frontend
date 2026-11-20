@@ -75,7 +75,7 @@ export default function SuppliersCrud() {
 
   async function cambiarEstado(supplier: Supplier) {
     const ok = await confirmar({
-      titulo: "Borrado de supplier",
+      titulo: "Borrado de proveedor",
       mensaje: `¿Seguro que querés eliminar a ${supplier.companyname} (${supplier.supplierid})?`,
       peligro: true,
     });
@@ -120,7 +120,7 @@ export default function SuppliersCrud() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold">Suppliers</h1>
+        <h1 className="text-2xl font-semibold">Proveedores</h1>
         <Button onClick={() => abrirModal(null)}>
           <Plus aria-hidden="true" />
           Nuevo
@@ -162,7 +162,7 @@ export default function SuppliersCrud() {
 
       <Modal
         open={modal.abierto}
-        title={modal.supplier ? `Editar supplier ${modal.supplier.supplierid}` : "Nuevo supplier"}
+        title={modal.supplier ? `Editar proveedor ${modal.supplier.supplierid}` : "Nuevo proveedor"}
         onClose={pedirCerrarModal}
         dismissable={false}
       >
