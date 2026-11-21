@@ -75,9 +75,18 @@ export default function SupplierForm({ supplier, confirmar, onCambios, onGuardad
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {CAMPOS.map((campo) => {
           const esCodigo = campo.name === "supplierid";
-          const obligatorio = esCodigo || campo.name === "companyname";
+          const esAlta = supplier === null;
+          const mostrar = !(esAlta && esCodigo);         // oculta en alta
+          const readOnly = esCodigo && !esAlta;          // solo lectura en edición
+          const obligatorio =
+            // en edición el código es obligatorio, en alta no existe → false
+            (!esAlta && esCodigo) || campo.name === "companyname";
+          if (!mostrar) return null;
           return (
-            <label key={campo.name} className="flex flex-col gap-1 text-xs font-medium text-muted-foreground">
+            <label
+              key={campo.name}
+              className="flex flex-col gap-1 text-xs font-medium text-muted-foreground"
+            >
               <span>
                 {campo.label}
                 {obligatorio && <span className="text-destructive"> *</span>}
@@ -85,12 +94,16 @@ export default function SupplierForm({ supplier, confirmar, onCambios, onGuardad
               <input
                 value={valores[campo.name]}
                 onChange={(e) =>
-                  cambiarCampo(campo.name, esCodigo ? e.target.value.toUpperCase() : e.target.value)
+                  cambiarCampo(
+                    campo.name,
+                    esCodigo ? e.target.value.toUpperCase() : e.target.value
+                  )
                 }
                 maxLength={campo.max}
                 required={obligatorio}
-                readOnly={esCodigo && supplier !== null}
-                className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none read-only:opacity-60 focus:border-ring focus:ring-2 focus:ring-ring/30"
+                readOnly={readOnly}
+                className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none
+                 read-only:opacity-60 focus:border-ring focus:ring-2 focus:ring-ring/30"
               />
             </label>
           );
