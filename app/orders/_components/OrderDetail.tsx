@@ -1,13 +1,12 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ApiError } from "@/lib/api";
-import { getOrder, getOrderDetail } from "../_lib/api";
+import { TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatoFecha, formatoMoneda, formatoPorcentaje } from "../_lib/format";
 import type { DetalleOrden, Order } from "../_lib/types";
 
-type Props = { orderid: number };
+type Props = {
+  orden: Order | null;
+  detalle: DetalleOrden | null;
+  error: string | null;
+};
 
 function Dato({ label, valor }: { label: string; valor: string | null | undefined }) {
   return (
@@ -18,28 +17,8 @@ function Dato({ label, valor }: { label: string; valor: string | null | undefine
   );
 }
 
-export default function OrderDetail({ orderid }: Props) {
-  const [orden, setOrden] = useState<Order | null>(null);
-  const [detalle, setDetalle] = useState<DetalleOrden | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelado = false;
-    Promise.all([getOrder(orderid), getOrderDetail(orderid)])
-      .then(([encabezado, lineas]) => {
-        if (cancelado) return;
-        setOrden(encabezado);
-        setDetalle(lineas);
-      })
-      .catch((err: unknown) => {
-        if (cancelado) return;
-        setError(err instanceof ApiError ? err.message : "Ocurrió un error inesperado");
-      });
-    return () => {
-      cancelado = true;
-    };
-  }, [orderid]);
-
+/** Cuerpo del modal: datos de la orden y tabla de productos (con scroll propio). */
+export default function OrderDetail({ orden, detalle, error }: Props) {
   if (error) {
     return <p className="text-sm text-destructive">{error}</p>;
   }
@@ -66,10 +45,11 @@ export default function OrderDetail({ orderid }: Props) {
         </div>
       </dl>
 
-      <div className="overflow-hidden rounded-lg border">
-        <Table>
-          <TableHeader className="bg-primary/15">
-            <TableRow className="hover:bg-transparent">
+      {/* Contenedor propio: la tabla scrollea sola si supera el alto máximo y el encabezado queda fijo */}
+      <div className="max-h-[40vh] overflow-y-auto rounded-lg border">
+        <table className="w-full text-sm">
+          <TableHeader className="sticky top-0 z-10 bg-card">
+            <TableRow className="bg-primary/15 hover:bg-primary/15">
               <TableHead className="px-3 text-primary">Producto</TableHead>
               <TableHead className="px-3 text-right text-primary">Cant.</TableHead>
               <TableHead className="px-3 text-right text-primary">Precio unit.</TableHead>
@@ -95,17 +75,23 @@ export default function OrderDetail({ orderid }: Props) {
               </TableRow>
             ))}
           </TableBody>
-        </Table>
+        </table>
       </div>
-
-      <dl className="ml-auto grid w-full max-w-xs grid-cols-2 gap-y-1 text-sm">
-        <dt className="text-muted-foreground">Flete</dt>
-        <dd className="text-right">{formatoMoneda(orden.freight)}</dd>
-        <dt className="border-t pt-1 font-semibold">Total final</dt>
-        <dd className="border-t pt-1 text-right text-base font-semibold text-primary">
-          {formatoMoneda(detalle.total_final)}
-        </dd>
-      </dl>
     </div>
+  );
+}
+
+/** Pie fijo del modal: flete y total final. */
+export function OrderTotals({ orden, detalle }: Pick<Props, "orden" | "detalle">) {
+  if (!orden || !detalle) return null;
+  return (
+    <dl className="ml-auto grid w-full max-w-xs grid-cols-2 gap-y-1 text-sm">
+      <dt className="text-muted-foreground">Flete</dt>
+      <dd className="text-right">{formatoMoneda(orden.freight)}</dd>
+      <dt className="border-t pt-1 font-semibold">Total final</dt>
+      <dd className="border-t pt-1 text-right text-base font-semibold text-primary">
+        {formatoMoneda(detalle.total_final)}
+      </dd>
+    </dl>
   );
 }

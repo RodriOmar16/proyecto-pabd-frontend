@@ -7,7 +7,8 @@ import { ApiError } from "@/lib/api";
 import type { Paginated } from "@/lib/types";
 import { listOrders } from "../_lib/api";
 import type { Order } from "../_lib/types";
-import OrderDetail from "./OrderDetail";
+import OrderDetail, { OrderTotals } from "./OrderDetail";
+import { useOrderDetail } from "../_lib/useOrderDetail";
 import OrderFilters from "./OrderFilters";
 import OrdersTable from "./OrdersTable";
 
@@ -23,6 +24,7 @@ export default function OrdersView() {
   const [buscando, setBuscando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [verOrden, setVerOrden] = useState<number | null>(null);
+  const { orden, detalle, error: errorDetalle } = useOrderDetail(verOrden);
 
   useEffect(() => {
     let cancelado = false;
@@ -88,8 +90,9 @@ export default function OrdersView() {
         title={verOrden !== null ? `Orden N° ${verOrden}` : ""}
         onClose={() => setVerOrden(null)}
         size="xl"
+        footer={<OrderTotals orden={orden} detalle={detalle} />}
       >
-        {verOrden !== null && <OrderDetail orderid={verOrden} />}
+        <OrderDetail orden={orden} detalle={detalle} error={errorDetalle} />
       </Modal>
     </div>
   );
