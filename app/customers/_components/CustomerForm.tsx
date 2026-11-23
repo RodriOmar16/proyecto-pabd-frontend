@@ -1,7 +1,11 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { Loader2 } from "lucide-react";
 import type { OpcionesConfirmacion } from "@/components/ConfirmDialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { ApiError } from "@/lib/api";
 import { createCustomer, updateCustomer } from "../_lib/api";
 import { CAMPOS } from "../_lib/field";
@@ -62,7 +66,6 @@ export default function CustomerForm({ cliente, confirmar, onCambios, onGuardado
       }
       onGuardado();
     } catch (err) {
-      // Muestra el mensaje que devolvió la API (ej. "Ya existe un cliente con el código...")
       setError(err instanceof ApiError ? err.message : "Ocurrió un error inesperado");
     } finally {
       setGuardando(false);
@@ -76,12 +79,13 @@ export default function CustomerForm({ cliente, confirmar, onCambios, onGuardado
           const esCodigo = campo.name === "customerid";
           const obligatorio = esCodigo || campo.name === "companyname";
           return (
-            <label key={campo.name} className="flex flex-col gap-1 text-xs font-medium text-muted-foreground">
-              <span>
+            <div key={campo.name} className="flex flex-col gap-1.5">
+              <Label htmlFor={`c-${campo.name}`} className="text-xs text-muted-foreground">
                 {campo.label}
-                {obligatorio && <span className="text-destructive"> *</span>}
-              </span>
-              <input
+                {obligatorio && <span className="text-destructive">*</span>}
+              </Label>
+              <Input
+                id={`c-${campo.name}`}
                 value={valores[campo.name]}
                 onChange={(e) =>
                   cambiarCampo(campo.name, esCodigo ? e.target.value.toUpperCase() : e.target.value)
@@ -89,9 +93,9 @@ export default function CustomerForm({ cliente, confirmar, onCambios, onGuardado
                 maxLength={campo.max}
                 required={obligatorio}
                 readOnly={esCodigo && cliente !== null} // el código no se edita
-                className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none read-only:opacity-60 focus:border-ring focus:ring-2 focus:ring-ring/30	"
+                className="read-only:opacity-60"
               />
-            </label>
+            </div>
           );
         })}
       </div>
@@ -103,20 +107,13 @@ export default function CustomerForm({ cliente, confirmar, onCambios, onGuardado
       )}
 
       <div className="flex justify-end gap-2 border-t border-border pt-4">
-        <button
-          type="button"
-          onClick={onCancelar}
-          className="rounded-md border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-primary/10"
-        >
+        <Button type="button" variant="outline" onClick={onCancelar} disabled={guardando}>
           Cancelar
-        </button>
-        <button
-          type="submit"
-          disabled={guardando}
-          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
-        >
+        </Button>
+        <Button type="submit" disabled={guardando}>
+          {guardando && <Loader2 className="animate-spin" aria-hidden="true" />}
           {guardando ? "Guardando…" : "Guardar"}
-        </button>
+        </Button>
       </div>
     </form>
   );

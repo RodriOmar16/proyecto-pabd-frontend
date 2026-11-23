@@ -1,6 +1,7 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 /** Botón luna/sol que alterna el tema claro y oscuro, y recuerda la elección. */
 export default function ThemeToggle() {
@@ -10,16 +11,17 @@ export default function ThemeToggle() {
   }
 
   return (
-    <button
-      type="button"
+    <Button
+      variant="ghost"
+      size="icon"
       onClick={cambiarTema}
       aria-label="Cambiar entre tema claro y oscuro"
       title="Cambiar tema"
-      className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-foreground"
+      className="text-muted-foreground"
     >
-      {/* Luna: se ve en modo claro (pasa a oscuro) · Sol: se ve en modo oscuro (pasa a claro) */}
-      <Moon className="h-5 w-5 dark:hidden" aria-hidden="true" />
-      <Sun className="hidden h-5 w-5 dark:block" aria-hidden="true" />
-    </button>
+      {/* Luna en modo claro · Sol en modo oscuro */}
+      <Moon className="size-5 dark:hidden" aria-hidden="true" />
+      <Sun className="hidden size-5 dark:block" aria-hidden="true" />
+    </Button>
   );
 }
