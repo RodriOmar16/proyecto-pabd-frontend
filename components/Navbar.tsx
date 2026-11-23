@@ -9,6 +9,7 @@ const LINKS = [
   { href: "/customers", label: "Clientes" },
   { href: "/suppliers", label: "Proveedores" },
   { href: "/employees", label: "Empleados" },
+  { href: "/orders", label: "Órdenes" },
 ];
 
 export default function Navbar() {

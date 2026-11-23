@@ -10,7 +10,7 @@ type Props = {
   onClose: () => void; // se llama al pedir cerrar: X, Esc o clic afuera (si dismissable)
   children: ReactNode;
   dismissable?: boolean; // false = no se cierra con clic afuera ni con Esc (solo con la X o un botón)
-  size?: "sm" | "lg";
+  size?: "sm" | "lg" | "xl";
 };
 
 /** Ventana modal basada en el Dialog de shadcn (Radix). Misma API que la versión anterior. */
@@ -24,7 +24,10 @@ export default function Modal({ open, title, onClose, children, dismissable = tr
     >
       <DialogContent
         aria-describedby={undefined}
-        className={cn("gap-0 p-0", size === "sm" ? "sm:max-w-md" : "sm:max-w-2xl")}
+        className={cn(
+          "gap-0 p-0",
+          size === "sm" ? "sm:max-w-md" : size === "xl" ? "sm:max-w-4xl" : "sm:max-w-2xl"
+        )}
         onInteractOutside={(e) => {
           if (!dismissable) e.preventDefault(); // clic afuera no cierra
         }}
